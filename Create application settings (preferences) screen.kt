@@ -1,14 +1,20 @@
-// If you want the values of your Preferences be automatically reflected in the Summaries (on screen start, and each time the value is changed), then inherit yours preference fragment from the class PreferenceFragmentAutomaticSummary, provided below (rather than from PreferenceFragmentCompat). The suggested class processes all the Preferences of types EditTextPreference, ListPreference and MultiSelectListPreference (and their descendants) on your settings screen - no additional coding required.
+// If you want the values of your Preferences be automatically reflected in the Summaries (on screen start, and each time the value is changed),
+// then inherit yours preference fragment from the class PreferenceFragmentAutomaticSummary, provided below (rather than from PreferenceFragmentCompat).
+// The suggested class processes all the Preferences of types EditTextPreference, ListPreference and MultiSelectListPreference (and their descendants)
+// on your settings screen - no additional coding required.
 
 // STEPS:
 
-// @ Open your app-level build.gradle file and check if its dependencies section contains the following line (the version 1.1.0 was the latest when this topic was created - in the time you read it the number could be higher):
+// @ Open your app-level build.gradle file and check if its dependencies section contains the following line (the version 1.1.0 was the latest when this topic
+// was created - in the time you read it the number could be higher):
 
 implementation 'androidx.preference:preference:1.1.0'
 
-// If the line is not there, add it. If Android Studio has changed the background color in the added line, change the version to the latest one (click the line, press Alt+Enter and select the option "Change to ...").
+// If the line is not there, add it. If Android Studio has changed the background color in the added line, change the version to the latest one
+// (click the line, press Alt+Enter and select the option "Change to ...").
 
-// @ Create "util" package, if you don't have it yet - it's a package to store pure technical stuff (such as helpers, ancestors, extension functions for Kotlin classes), which has no relation to the business of the application and, hence, can be reused as is in different applications).
+// @ Create "util" package, if you don't have it yet - it's a package to store pure technical stuff (such as helpers, ancestors, extension functions
+// for Kotlin classes), which has no relation to the business of the application and, hence, can be reused as is in different applications).
 
 // @ In "util" package, create class PreferenceFragmentAutomaticSummary and copy to it the source code, provided below (just after the "package" statement):
 
@@ -20,7 +26,7 @@ If you want the values of your Preferences be automatically reflected in the Sum
 the value is changed), then inherit yours preference fragment from this class (rather than from PreferenceFragmentCompat).
 PreferenceFragmentAutomaticSummary processes all the Preferences of types EditTextPreference, ListPreference and
 MultiSelectListPreference (and their descendants) on your settings screen - no additional coding required.
-See http://code.intfast.ca/viewtopic.php?t=821 ???
+See https://tinyurl.com/CreateAppSettings
 ****************************************************************************************************************************/
 
 abstract class PreferenceFragmentAutomaticSummary:
@@ -70,7 +76,8 @@ abstract class PreferenceFragmentAutomaticSummary:
 
 // @ Create "pref" package.
 
-// @ In "pref" package, create class PrefFragment with the following code after the "package" statement (later, you will customize it according to the actual settings):
+// @ In "pref" package, create class PrefFragment with the following code after the "package" statement
+// (later, you will customize it according to the actual settings):
 
 import <APP ROOT PACKAGE>.R
 import android.content.SharedPreferences
@@ -108,7 +115,7 @@ class PrefFragment: PreferenceFragmentAutomaticSummary(), SharedPreferences.OnSh
 //        dropDownPref.key = PrefKey.DEFAULT_DARKNESS
 //        dropDownPref.title = getString(R.string.word__darkness)
 //        dropDownPref.isSingleLineTitle = false
-//        dropDownPref.entryValues /* what we save */ = Darkness.toArray() // http://code.intfast.ca/viewtopic.php?t=820 ???
+//        dropDownPref.entryValues /* what we save */ = Darkness.toArray() // https://tinyurl.com/PrefsFromConst
 //        dropDownPref.entries /* what we show to user */ = Darkness.toDisplayedValuesArray(this.context!!)
 //        dropDownPref.setDefaultValue(Darkness.MEDIUM_DARK)
 //        screen.addPreference(dropDownPref)
@@ -117,7 +124,8 @@ class PrefFragment: PreferenceFragmentAutomaticSummary(), SharedPreferences.OnSh
     }
 }
 
-// @ In "pref" package, create PrefActivity (the Activity which will be used as the Preferences screen): right click "pref" directory > New > Activity > Empty Activity:
+// @ In "pref" package, create PrefActivity (the Activity which will be used as the Preferences screen):
+// right click "pref" directory > New > Activity > Empty Activity:
 
 // Activity Name: PrefActivity
 // Generate Layout File: checked (don't change)
@@ -173,7 +181,8 @@ class PrefActivity: AppCompatActivity() {
     }
 }
 
-// @ Create package "appwide" if you don't have it yet. It will contain the application-wide (i.e. not belonging to one particular business area but used in many packages) classes and objects (for example, controllers and constants objects/enums).
+// @ Create package "appwide" if you don't have it yet. It will contain the application-wide (i.e. not belonging to one particular business area
+// but used in many packages) classes and objects (for example, controllers and constants objects/enums).
 
 // @ In the "appwide" package, create object PrefKey with the following code after the "package" statement:
 
@@ -187,8 +196,10 @@ object PrefKey {
 //    const val CCC = "ccc" // PrefKey.CCC
 }
 
-// Every key, by which the stored preferences are accessed (written and read), should be added to this object as a constant. No hardcoding, only hardcore! :lol:
+// Every key, by which the stored preferences are accessed (written and read), should be added to this object as a constant.
 
-// @ If you have preferences of types ListPreference, MultiSelectListPreference or DropDownPreference, and want to populate their lists from constants of from a Range, please read Populate multi-values Preferences from constants. ???
+// @ If you have preferences of types ListPreference, MultiSelectListPreference or DropDownPreference, and want to populate their lists from constants
+// of from a Range, please read https://tinyurl.com/PrefsFromConst
 
-// @ Create a menu, which opens the Settings screen, and add it to each Activity. Steps to create a menu are here. ???
+// @ Create a menu, which opens the Settings screen, and add it to each Activity.
+// Steps to create a menu are here: https://tinyurl.com/CreateAndroidMenu

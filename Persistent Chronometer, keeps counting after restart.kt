@@ -1,8 +1,12 @@
 // STEPS:
 
-// @ Create object AppPrefs as described in Convenient access to application's SharedPreferences.kt ???. It allows to store LocalDateTime values in the application's SharedPreferences in a convenient way (we need to remember the moment when the Chronometer started - that moment will be used to calculate the new base when the Chronometer's parent Activity is resuming).
+// @ Create object AppPrefs as described here: https://tinyurl.com/SharedPreferences.
+// It allows to store LocalDateTime values in the application's SharedPreferences in a convenient way
+// (we need to remember the moment when the Chronometer started - that moment will be used to calculate the new base
+// when the Chronometer's parent Activity is resuming).
 
-// @ In "util" package, created in first step, create a Kotlin file named ExtensionFunctions (if you don't have it) and add the following code to it:
+// @ In the "util" package, created in first step, create a Kotlin file named ExtensionFunctions (if you don't have it)
+// and add the following code to it:
 
 import android.content.Context
 import android.os.SystemClock
@@ -99,7 +103,8 @@ myChronometer.resume(this)
 
 // IF YOU HAVE MORE THAN ONE CHRONOMETER IN YOUR APPLICATION...
 
-// ...then ALWAYS pass the chronometer name (i.e. the name of the pointer variable) to start() and resume(). Internally, that name will be used as the part of the key, by which the start time of each Chronometer is stored in the SharedPreferences
+// ...then ALWAYS pass the chronometer name (i.e. the name of the pointer variable) to start() and resume().
+// Internally, that name will be used as the part of the key, by which the start time of each Chronometer is stored in the SharedPreferences:
 
 firstChronometer.start("firstChronometer", this)
 secondChronometer.start("secondChronometer", this)
@@ -107,4 +112,6 @@ secondChronometer.start("secondChronometer", this)
 firstChronometer.resume("firstChronometer", this)
 secondChronometer.resume("secondChronometer", this)
 
-// Pay attention, that if you have more than one Chronometer in your app, you must give them names (IDs) unique per app - even if they are placed on different Activities. If you want to give them a same name, then pass to start() and resume() other strings, which identify each Chronometer (like "ActivityName.ChronometerName").
+// If you have more than one Chronometer in your app, you must give them names (IDs) unique per app - even if they are placed on different Activities.
+// If you want to give them a same name, then pass to start() and resume() other strings, which identify each Chronometer
+// (like "ActivityName.ChronometerName").

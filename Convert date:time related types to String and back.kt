@@ -1,4 +1,4 @@
-package ca.intfast.iftimer.util
+package <YOUR UTIL PACKAGE>
 
 import java.time.LocalDate
 import java.time.LocalDateTime

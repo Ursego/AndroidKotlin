@@ -1,7 +1,7 @@
 // The problem:
 
 // You have a function with a generic type:
-\
+
 fun <T : Animal> createAnimal() : T {
    val animal : T = Animal() as T // you mistakenly think, that T (Cat, Dog or whatever) is created...
    animal.sound() // ...and it will miauw or bark, but an Animal is created (you called its constructor, after all!), so there is no sound
@@ -10,7 +10,8 @@ fun <T : Animal> createAnimal() : T {
 
 // The solution:
 
-// To enable the solution, mark the generic parameter as reified. That is possible only in inline functions, so mark the function as inline. And instantiate (i.e. call the constructor) this way:
+// To enable the solution, mark the generic parameter as reified. 
+// That is possible only in inline functions, so mark the function as inline and instantiate it (i.e. call its constructor) this way:
 
 inline fun <reified T : Animal> createAnimal() : T {
    val actualRuntimeClassConstructor : KFunction<T> = T::class.constructors.first() // get pointer to constructor of Cat, Dog or whatever

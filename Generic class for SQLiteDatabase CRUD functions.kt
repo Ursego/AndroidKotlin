@@ -1,26 +1,39 @@
-// The class CrudHelper, presented here, abstracts the SQLite-related boilerplate code and provides a simple and easy-to-use API for the typical database operations. CrudHelper:
+// CrudHelper abstracts SQLite boilerplate and provides a simple API for typical database operations:
 
-// 1. Persists the data in Kotlin objects into the database by simply passing the objects which contain data to be used in the DML statements.
+// 1. Persists Kotlin objects to the database by passing objects directly to DML statements.
 
-// 2. Returns data, retrieved from DB, as a Kotlin type: scalar, object (for a single record), or ArrayList of objects (for a recordset). They are ready to be used in business logic directly. No need to contaminate your business code with manipulations with ContentValues and Cursor anymore!
+// 2. Returns database results as Kotlin types: scalars, objects (single records), or ArrayLists (recordsets) - ready for immediate
+//    use in business logic. No more ContentValues and Cursor manipulation cluttering your business code!
 
-// Most examples in books and the Internet suggest to create all the CRUD functions, serving different entities, in one class inherited directly from SQLiteOpenHelper. Even worse - all those examples are forcing you to mix the business logic with such pure technical code as population of ContentValues and reading from Cursor. Unfortunately, even the rarely found examples, which suggest to dedicate separate classes to CRUD operations on different entities, promote endless copy-paste as well. I have no idea why all the smart and experienced people, who wrote all these books and articles, didn't encapsulate the common logic in a generic class - even first-year Computer Science students know that code duplication is bad.
+// Most examples place all CRUD functions for different entities in a single class inheriting from SQLiteOpenHelper.
+// Worse, they mix business logic with technical code like ContentValues population and Cursor reading.
+// Even examples that suggest separate classes for each entity promote endless copy-paste.
+// I don't understand why experienced developers writing these tutorials haven't encapsulated common logic in a generic class - 
+// first-year Computer Science students know code duplication is bad.
 
-// For me, that approach is absolutely unacceptable, so I am going against the mainstream. For each entity (for example, Emp, Dept, etc.), I prefer to create a separate class, dedicated to DB operations only with that entity (for example, EmpController, DeptController, etc.) - instead of dumping everything into one monstrous mess inside CustomSQLiteOpenHelper. And, of course, to separate technical code from business code.
+// I reject this approach entirely. For each entity (Emp, Dept, etc.), I create a dedicated controller class (EmpController, DeptController)
+// handling only that entity's database operations - rather than dumping everything into one monolithic CustomSQLiteOpenHelper. 
+// And I separate technical code from business logic.
 
-// Usually, CRUD functions in different entities are similar (the only difference is how you populate ContentValues and extract values from Cursor, or in SQLs). If you remove the operation with ContentValues and Cursor from the picture, then, in most cases, those functions become absolutely identical: INSERT one record and return the autoincremented ID; UPDATE/SELECT one record by ID; SELECT ArrayList by a WHERE clause.
+// CRUD functions across entities are typically similar - differing only in ContentValues population, Cursor extraction, and SQL specifics.
+// Remove ContentValues/Cursor manipulation, and these functions become nearly identical:
+// INSERT one record and return the auto-incremented ID; UPDATE/SELECT one record by ID; SELECT ArrayList by WHERE clause.
 
-// The solution refactors the common code to an ancestor class, exempting the developer from creation of many classes which look like enzygotic twins (with microscopic differences here and there). That makes the XxxController classes very small, almost empty - they contain only the entity-specific logic which requires additional processing on top of calling the CRUD functions, encapsulated in the ancestor. If your entity needs the standard CRUD functions only, you don't need to create a XxxController class for it at all. Instead, call these functions directly from any place. For that purpose, create an object of the class, which encapsulates the CRUD functions (rather than inherit from it) - it's not abstract.
-
-// You can reuse my solution, if you want. But it's important to mention, that the functionality is still under construction - in fact, I started to learn Kotlin & Android 2 weeks ago, and wrote the provided code while creating my first learning-purpose app (I just started creating it, ha-ha!). So, I believe, the solution is raw (and, for sure, not tested well) - don't trust it with closed eyes. If you find a bug or have an idea how to improve - create a comment in this topic, or send me an email to ursego@gmail.com. OK, let's go!
+// This solution refactors common code into an ancestor class, eliminating the need to create many near-identical controller classes.
+// XxxController classes become very small - containing only entity-specific logic requiring additional processing beyond standard CRUD calls.
+// If your entity needs only standard CRUD functions, skip creating a controller entirely and call 
+// functions directly by instantiating the CRUD helper class (it's not abstract).
 
 // STEPS:
 
-// @ Perform the steps, described in Extend Cursor interface and ContentValues class. ???
+// @ Perform the steps, described here: https://tinyurl.com/CursorInterface.
 
-// @ Create "db" package, where you will put the stuff, related to database manipulations, specific to this application. Pay attention, that any stuff, which doesn't deal with the entities of this app (and, hence, can be reused in other apps), should be placed in the "util" package - even if it DB-related.
+// @ Create the "db" package, where you will put the stuff, related to database manipulations, specific to this application.
+// Pay attention that any stuff, which doesn't deal with the entities of this app (and, hence, can be reused in other apps),
+// should be placed in the "util" package - even if it DB-related.
 
-// @ In "db" package, create a Kotlin file named DbInfo and copy the following code into it - just after the "package" directive (change the DB name to the actual one):
+// @ In the "db" package, create a Kotlin file named DbInfo and copy the following code into it - just after the "package" directive
+// (change the DB name to the actual one):
 
 object DbInfo {
     const val NAME = "<YOUR DB NAME>.db"
@@ -44,7 +57,11 @@ object DbColumn {
     const val IS_ACTIVE = "is_active"
 }
 
-// We create one object which will contain all the columns of all the tables (rather than a dedicated object for each table) because a same column can exist in many tables, and we want to ensure consistency all over the application (after all, that's why we use constants!). That also obeys the DRY principle (Don't Repeat Yourself) - we don't duplicate a same column name constant in many places. Obviously, we will use these constants to build the CREATE TABLE statements. So, if the column name is "dob", it will be "dob" everywhere - not "dob" in one table, "birth_date" in another table, and "date_of_birth" in another table.
+// We create one object which will contain all the columns of all the tables (rather than a dedicated object for each table) because
+// a same column can exist in many tables, and we want to ensure consistency all over the application (after all, that's why we use constants!).
+// That also obeys the DRY principle (Don't Repeat Yourself) - we don't duplicate a same column name constant in many places.
+// Obviously, we will use these constants to build the CREATE TABLE statements.
+// So, if the column name is "dob", it will be "dob" everywhere - not "dob", "birth_date" and "date_of_birth" in different tables.
 
 // @ In "db" package, create a Kotlin file named CustomSQLiteOpenHelper and copy the following code into it - just after the "package" directive:
 
@@ -96,20 +113,21 @@ open class CustomSQLiteOpenHelper(context: Context): SQLiteOpenHelper(context, D
 
 // Interface Crudable
 
-// Forces you to write the "boring" technical code (population of ContentValues and reading from Cursor) separately from the "interesting" business logic, which makes that logic easier to write and, later, understand.
+// Forces you to write the "boring" technical code (population of ContentValues and reading from Cursor) separately
+// from the "interesting" business logic, which makes that logic easier to write and, later, understand.
 
-// @ In "util" package, create a Kotlin file named Crudabe and copy the following code into it - just after the "package" directive (everything is explained in the comments):
+// @ In "util" package, create a Kotlin file named Crudabe and copy the following code into it - just after the "package" directive
+// (everything is explained in the comments):
 
 import android.content.ContentValues
 import android.database.Cursor
 import <YOUR BASE PACKAGE>.db.DbColumn
 
 // --------------------------------------------------------------------------------------------------------------------------
-// Must be implemented by all model classes, representing different entities of the application (like Emp, Dept etc.).
-// That will allow CrudHelper class to manipulate with those classes in its CRUD functions.
-// This interface forces you to write pure technical boilerplate code (population of ContentValues and reading from Cursor)
-// separately from the business logic, which makes that logic easier to write and, later, understand.
-// http://code.intfast.ca/viewtopic.php?t=815
+// Must be implemented by all model classes representing application entities (e.g., Emp, Dept).
+// This allows CrudHelper to manipulate these classes in its CRUD operations.
+// The interface enforces separation of technical boilerplate (ContentValues population 
+// and Cursor reading) from business logic, making the latter easier to write and maintain.
 // --------------------------------------------------------------------------------------------------------------------------
 
 interface Crudable {
@@ -142,7 +160,7 @@ interface Crudable {
 
     // Just copy-paste to the descendant and customize according to the fields in that descendant:
     //    override fun populateFromCursor(cursor: Cursor) {
-    //        this.id = cursor.getInt(DbColumn.ID) // http://code.intfast.ca/viewtopic.php?t=814
+    //        this.id = cursor.getInt(DbColumn.ID) // https://tinyurl.com/CursorInterface
     //        this.firstName = cursor.getString(DbColumn.FIRST_NAME)
     //        this.lastName = cursor.getString(DbColumn.LAST_NAME)
     //        this.dob = cursor.getLocalDate(DbColumn.DOB)
@@ -153,24 +171,26 @@ interface Crudable {
 
 // Class CrudHelper
 
-// The main working horse of the functionality. Encapsulates population of ContentValues and reading from Cursor, so you will never write these loops anymore among your business logic. Has the following functions which operate on objects, implementing the Crudable interface:
+// The main working horse of the functionality.
+// Encapsulates population of ContentValues and reading from Cursor, so you will never write these loops anymore among your business logic.
+// Has the following functions which operate on objects, implementing the Crudable interface:
 
 // * retrieveList() // SELECTs a recordset (ArrayList)
 // * retrieveOne() // SELECTs a single record
 
 // // Functions which SELECT one scalar value of the given data type:
 
-// * queryForString() // For example, SELECT last_name FROM emp WHERE emp_id = 123
-// * queryForLong() // For example, SELECT COUNT(*) FROM emp
-// * queryForDouble() // For example, SELECT salary FROM emp WHERE emp_id = 123
-// * queryForBoolean() // For example, SELECT is_active FROM emp WHERE emp_id = 123
-// * exists() // Mimics the EXISTS statement of SQL
+// * queryForString() // example: SELECT last_name FROM emp WHERE emp_id = 123
+// * queryForLong() // example: SELECT COUNT(*) FROM emp
+// * queryForDouble() // example: SELECT salary FROM emp WHERE emp_id = 123
+// * queryForBoolean() // example: SELECT is_active FROM emp WHERE emp_id = 123
+// * exists() // mimics the EXISTS statement of SQL
 
 // // DML functions:
 
 // * insert()
 // * update()
-// * upsert() // UPDATEs the record if it exists in the table, INSERTs if doesn't
+// * upsert() // UPDATEs the record if it exists, INSERTs if doesn't
 // * delete()
 
 // @ In "util" package, create a Kotlin file named CrudHelper and copy the following code into it - just after the "package" directive:
@@ -178,11 +198,11 @@ interface Crudable {
 import android.content.Context
 import android.database.SQLException
 import android.database.sqlite.SQLiteDoneException
-import ca.intfast.iftimer.db.CustomSQLiteOpenHelper
+import <YOUR PACKAGE>.db.CustomSQLiteOpenHelper
 import kotlin.reflect.KFunction
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Before you add this class to your app, create CustomSQLiteOpenHelper: http://code.intfast.ca/viewtopic.php?t=815
+// Before you add this class to your app, create CustomSQLiteOpenHelper: https://tinyurl.com/SQLiteCRUD
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
@@ -215,7 +235,7 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
     //
     // If no fitting function is found in crudHelper, the Activity can call the functions of
     // crudHelper.writableDatabase & crudHelper.readableDatabase directly.
-    // For example, to run an SQL statement, which returns nothing (or you don't need the returned value), write:
+    // example: to run an SQL statement, which returns nothing (or you don't need the returned value), write:
     // crudHelper.writableDatabase.execSQL("...")
     // ----------------------------------------------------------------------------------------------------------------------
 
@@ -255,7 +275,7 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
                 // The following two code lines is a dirty trick to create an instance of a generic type.
                 // To enable that, the generic parameter is marked as reified. That is possible only
                 // in inline functions, so this function and all its callers are converted to inline.
-                // http://code.intfast.ca/viewtopic.php?t=816
+                // https://tinyurl.com/GenericTypeConstructor
                 val actualRuntimeClassConstructor: KFunction<T> = T::class.constructors.first()
                 val entity: T = actualRuntimeClassConstructor.call()
 
@@ -290,8 +310,7 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
                 if (required) throw Exception("CrudHelper.retrieveOne(): no data found by '$sqlSelect'.")
                 null
             }
-            else -> throw
-            Exception("CrudHelper.retrieveOne(): ${entities.size} rows returned by '$sqlSelect' while one row expected.")
+            else -> throw Exception("CrudHelper.retrieveOne(): ${entities.size} rows returned by '$sqlSelect' while one row expected.")
         }
     }
     /***********************************************************************************************************************/
@@ -348,7 +367,7 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
     /***********************************************************************************************************************/
     fun queryForDouble(sqlSelect: String, required: Boolean = false): Double? {
         // Executes a statement that returns a scalar String value convertible to Double.
-        // For example, SELECT salary FROM emp WHERE emp_id = 123
+        // example: SELECT salary FROM emp WHERE emp_id = 123
         val resultAsDouble: Double
         val resultAsString = this.queryForString(sqlSelect, required)
         if (resultAsString == null && !required) return null
@@ -366,7 +385,7 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
     /***********************************************************************************************************************/
     fun queryForBoolean(sqlSelect: String, required: Boolean = false): Boolean? {
         // Executes a statement that returns a scalar Long value which can be treated as Boolean (i.e. 0 or 1).
-        // For example, SELECT is_active FROM emp WHERE emp_id = 123
+        // example: SELECT is_active FROM emp WHERE emp_id = 123
         val result = this.queryForLong(sqlSelect, required)
         if (result == null && !required) return null
         // if (result == null && required), then an Exception has already been thrown by queryForLong()
@@ -442,4 +461,6 @@ const val g_DEBUG_MODE = true // TODO: must be false when promoted to production
         }
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-// @ You have created the class CustomSQLiteOpenHelper with the function createDbObjects() having commented-out sample code. Now it's time to uncomment and customize it, so the function will create your table(s). When that function works perfectly, comment out the fragment, added to onCreate() of the MainActivity in the previous step (or make g_DEBUG_MODE false).
+// @ You have created the class CustomSQLiteOpenHelper with the function createDbObjects() having commented-out sample code.
+// Now it's time to uncomment and customize it, so the function will create your table(s).
+// When that function works, comment out the fragment, added to onCreate() of the MainActivity in the previous step (or make g_DEBUG_MODE false).

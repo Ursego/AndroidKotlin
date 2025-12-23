@@ -1,12 +1,25 @@
-// We should use constants (rather than hardcoding) whenever possible. That includes populating of ListPreference, MultiSelectListPreference and DropDownPreference. To do it in a generic and elegant way, the objects, which serve as containers for constants groups (or enums), should have functions which return arrays, ready to be assigned to preferences' properties. We need the following functions (to make life easier, they are defined in the interface which will be provided soon):
+// We should use constants (rather than hardcoding) whenever possible.
+// That includes populating of ListPreference, MultiSelectListPreference and DropDownPreference.
+// To do it in a generic and elegant way, the objects, which serve as containers for constants groups (or enums), should have functions
+// hich return arrays, ready to be assigned to preferences' properties.
+// We need the following functions (to make life easier, they are defined in the interface which will be provided soon):
 
-// toArray() - Returns the values of all the constants as an array of the constants type. Used to populate Preference.entryValues when the constants type is String.
+// toArray() - Returns the values of all the constants as an array of the constants type.
+//      Used to populate Preference.entryValues when the constants type is String.
 
-// toStringArray() - Returns the values of all the constants as an array of String. Used to populate Preference.entryValues when the constants type is NOT String. In fact, it works for String too, so you can call it always, and forget about toArray().
+// toStringArray() - Returns the values of all the constants as an array of String.
+//      Used to populate Preference.entryValues when the constants type is NOT String.
+//      In fact, it works for String too, so you can call it always, and forget about toArray().
 
-// toDisplayedValuesArray() - Returns the human-readable descriptions of all the constants. Used to populate Preference.entries - the array of values which are displayed to the user in list-based prefs. By default, grabs the values from R.string, so you need to define an R.string resource for each constant. Otherwise (for example, if you want to hardcode the displayed values or grab them from the DB), override toDisplayedValuesArray() and build the array in a custom way.
+// toDisplayedValuesArray() - Returns the human-readable descriptions of all the constants.
+//      Used to populate Preference.entries - the array of values which are displayed to the user in list-based prefs.
+//      By default, grabs the values from R.string, so you need to define an R.string resource for each constant.
+//      Otherwise (for example, if you want to hardcode the displayed values or grab them from the DB), override toDisplayedValuesArray() and
+//      build the array in a custom way.
 
-// To ensure the same behaviour, all the classes, whose constants are used to populate multi-values Preferences, must implement the interface ConstantsSet<T> (where <T> is the constants' type), provided below. Pay attention, that its abstract functions have comments with examples of implementation - copy-paste them to the implementing objects and customize.
+// To ensure the same behaviour, all the classes, whose constants are used to populate multi-values Preferences, must implement
+// the ConstantsSet<T> interface (where <T> is the constants' type), provided below.
+// Its abstract functions have comments with examples of implementation - copy-paste them to the implementing objects and customize.
 
 package <YOUR PACKAGE>
 
@@ -15,7 +28,6 @@ import android.content.Context
 /****************************************************************************************************************************
 To be implemented by classes whose constants are used to populate multi-values Preferences
 (ListPreference, MultiSelectListPreference, DropDownPreference).
-Example of use: http://code.intfast.ca/viewtopic.php?t=820 ???
 ****************************************************************************************************************************/
 
 interface ConstantsSet<T> {
@@ -137,15 +149,23 @@ object Darkness : ConstantsSet<String> {
 // Step 2:
 // Utilize it when you are building the settings screen. The next code snippet illustrates the idea.
 
-// Pay attention, that the PrefFragment in that example is inherited not from PreferenceFragmentCompat but from PreferenceFragmentAutomaticSummary (which is described here). You are not obligated to do that - you can inherit your preference fragment directly from PreferenceFragmentCompat if you want. But inheriting from PreferenceFragmentAutomaticSummary gives you automatic displaying of the value, currently stored in each list-based Preference, in its Summary - for free.
+// Pay attention that the PrefFragment in that example is inherited not from PreferenceFragmentCompat but from PreferenceFragmentAutomaticSummary
+// (which is described here).
+// You are not obligated to do that - you can inherit your preference fragment directly from PreferenceFragmentCompat if you want.
+// But inheriting from PreferenceFragmentAutomaticSummary gives you automatic displaying of the value, currently stored in each list-based Preference,
+// in its Summary - for free.
 
-// Also pay attention, that prefs are created in code rather than in an XML file. That approach has 3 benefits:
+// Also notice that prefs are created in code rather than in an XML file. That approach has 3 benefits:
 
-// 1. Preference.key can be populated with a constant (so, the preference can be accessed later using the same constant). Otherwise you would be forced to store the key as a string resource, and retrieve it each time you need to read the preference. Or populate the key with a hard-coded value, which is unacceptable.
+// 1. Preference.key can be populated with a constant (so, the preference can be accessed later using the same constant).
+//      Otherwise you would be forced to store the key as a string resource, and retrieve it each time you need to read the preference.
+//      Or populate the key with a hard-coded value, which is unacceptable.
 
-// 2. The whole logic, creating the Preference, is concentrated in one place (rather than distributed between XML and code). Not all the properties can be populated in XML in an elegant way, so you would populate some of them programmatically anyway.
+// 2. The whole logic, creating the Preference, is concentrated in one place (rather than distributed between XML and code).
+//      Not all the properties can be populated in XML in an elegant way, so you would populate some of them programmatically anyway.
 
-// 3. You have an absolute freedom what to do. For example, you can set Preference.title dynamically, or show/hide preferences depending on conditions in runtime.
+// 3. You have an absolute freedom what to do.
+//      For example, you can set Preference.title dynamically, or show/hide preferences depending on conditions in runtime.
 
 class PrefFragment : PreferenceFragmentAutomaticSummary(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -181,7 +201,7 @@ class PrefFragment : PreferenceFragmentAutomaticSummary(), SharedPreferences.OnS
 // 2. It's important to override getDisplayedValue() since the original version of ConstantsSet<T> reads values from R.string, which is probably irrelevant in most ranages.
 
 import android.content.Context
-import ca.intfast.util.ConstantsSet
+import <YOUR UTIL PACKAGE>.ConstantsSet
 import kotlin.math.roundToInt
 
 object Temperature : ConstantsSet<Int> {

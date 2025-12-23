@@ -1,4 +1,5 @@
-// @ If you want your Chronometer to be persistent (i.e. to keep counting after app restart), do these steps: Persistent Chronometer, keeps counting after restart ???
+// @ If you want your Chronometer to be persistent (i.e. to keep counting after app restart), do these steps:
+// https://tinyurl.com/PersistentChronometer
 
 // @ Add to the Activity, in which you want to listen to Chronometer ticking:
 
