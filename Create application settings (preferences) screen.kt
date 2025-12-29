@@ -5,13 +5,12 @@
 
 // STEPS:
 
-// @ Open your app-level build.gradle file and check if its dependencies section contains the following line (the version 1.1.0 was the latest when this topic
-// was created - in the time you read it the number could be higher):
+// @ Open your build.gradle (Module: App) and check if its dependencies section contains the following line (the version number could be different):
 
-implementation 'androidx.preference:preference:1.1.0'
+implementation 'androidx.preference:preference:1.2.1'
 
-// If the line is not there, add it. If Android Studio has changed the background color in the added line, change the version to the latest one
-// (click the line, press Alt+Enter and select the option "Change to ...").
+// If the line is not there, add it.
+// If the background color is red in the added line, change the version to the latest one (click the line, press Alt+Enter and select the option "Change to ...").
 
 // @ Create "util" package, if you don't have it yet - it's a package to store pure technical stuff (such as helpers, ancestors, extension functions
 // for Kotlin classes), which has no relation to the business of the application and, hence, can be reused as is in different applications).
