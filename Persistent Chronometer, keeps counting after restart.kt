@@ -1,7 +1,7 @@
 // STEPS:
 
-// @ Create object AppPrefs as described here: https://tinyurl.com/SharedPreferences.
-// It allows to store LocalDateTime values in the application's SharedPreferences in a convenient way
+// @ Create AppPrefs as described here: https://tinyurl.com/SharedPreferences.
+// It allows storing LocalDateTime values in the application's SharedPreferences in a convenient way
 // (we need to remember the moment when the Chronometer started - that moment will be used to calculate the new base
 // when the Chronometer's parent Activity is resuming).
 
@@ -15,7 +15,7 @@ import java.time.Duration
 import java.time.LocalDateTime
 
 // -----------------------------------------------------------------------------------------------------------------
-// ------- Extend Chronometer functions to allow persistence :
+// ------- Extend Chronometer functions to allow persistence (https://tinyurl.com/PersistentChronometer):
 // -----------------------------------------------------------------------------------------------------------------
 
 // The key, by which the base time of the Chronometer (as a LocalDateTime) will be stored in SharedPreferences,
