@@ -79,7 +79,6 @@ abstract class PreferenceFragmentAutomaticSummary:
 // @ In "pref" package, create class PrefFragment with the following code after the "package" statement
 // (later, you will customize it according to the actual settings):
 
-import <APP ROOT PACKAGE>.R
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.*
@@ -95,14 +94,14 @@ class PrefFragment: PreferenceFragmentAutomaticSummary(), SharedPreferences.OnSh
         var switchPref: SwitchPreferenceCompat
         var dropDownPref: DropDownPreference
 
-//        // SAMPLE FRAGMENT FOR PreferenceCategory
+//        // A SAMPLE FRAGMENT FOR PreferenceCategory
 //        prefCategory = PreferenceCategory(context)
 //        prefCategory.key = "batch_defaults"
 //        prefCategory.title = getString(R.string.pref_category__batch_defaults)
 //        prefCategory.isSingleLineTitle = false
 //        screen.addPreference(prefCategory)
 //
-//        // SAMPLE FRAGMENT FOR SwitchPreferenceCompat
+//        // A SAMPLE FRAGMENT FOR SwitchPreferenceCompat
 //        switchPref = SwitchPreferenceCompat(context)
 //        switchPref.key = PrefKey.DEFAULT_IS_DECAF
 //        switchPref.title = getString(R.string.word__decaf)
@@ -110,7 +109,7 @@ class PrefFragment: PreferenceFragmentAutomaticSummary(), SharedPreferences.OnSh
 //        switchPref.setDefaultValue(true)
 //        screen.addPreference(switchPref)
 //
-//        // SAMPLE FRAGMENT FOR DropDownPreference
+//        // A SAMPLE FRAGMENT FOR DropDownPreference
 //        dropDownPref = DropDownPreference(context)
 //        dropDownPref.key = PrefKey.DEFAULT_DARKNESS
 //        dropDownPref.title = getString(R.string.word__darkness)
@@ -181,8 +180,8 @@ class PrefActivity: AppCompatActivity() {
     }
 }
 
-// @ Create package "appwide" if you don't have it yet. It will contain the application-wide (i.e. not belonging to one particular business area
-// but used in many packages) classes and objects (for example, controllers and constants objects/enums).
+// @ Create package "appwide" if you don't have it yet.
+// It will contain the application-wide classes and objects (for example, controllers and constants objects/enums).
 
 // @ In the "appwide" package, create object PrefKey with the following code after the "package" statement:
 
