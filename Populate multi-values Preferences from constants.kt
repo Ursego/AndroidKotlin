@@ -192,11 +192,15 @@ class PrefFragment : PreferenceFragmentAutomaticSummary(), SharedPreferences.OnS
 
 // POPULATING A MULTI-VALUES PREFERENCE FROM A RANGE
 
-// Sometimes, we have a legal range of values rather than constants. For example, in my application there was a range of temperatures to which an espresso machine can be set - from 89C to 96C. So, I stored them in an IntRange rather than created 8 constants. In such a case, the container class can implement the interface ConstantsSet<T> as well, but the implementation is slightly different.
+// Sometimes, we have a legal range of values rather than constants.
+// For example, in my application there was a range of temperatures to which an espresso machine can be set - from 85C to 96C.
+// So, I stored them in an IntRange rather than created 8 constants.
+// In such a case, the container class can implement the interface ConstantsSet<T> as well, but the implementation is slightly different.
 
 // In fact, only two things are different:
 
-// 1. The implementation of toArray() builds the array by looping on the range rather than listing constants in arrayOf(). When ConstantsSet<T> gets that array, the processing keeps going in the same way as if the array would be built from constants.
+// 1. The implementation of toArray() builds the array by looping on the range rather than listing constants in arrayOf().
+//        When ConstantsSet<T> gets that array, the processing keeps going in the same way as if the array would be built from constants.
 
 // 2. It's important to override getDisplayedValue() since the original version of ConstantsSet<T> reads values from R.string, which is probably irrelevant in most ranages.
 
