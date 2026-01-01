@@ -2,12 +2,6 @@
 // AppPrefs hides some complexity such as: obtaining a SharedPreferences, errors handling and casting from/to the original type.
 // For example, if you need to read a LocalDateTime, you simply call AppPrefs.getLocalDateTime(DbColumn.UPDATED_AT, context).
 
-// Example of use:
-
-AppPrefs.put(PrefKey.APP_LANGUAGE, selectedLanguage, context)
-...
-val currLanguage = AppPrefs.getString(PrefKey.APP_LANGUAGE, context)
-
 // STEPS:
 
 // @ Open your build.gradle (Module: App) and check if its dependencies section contains the following line (the version number could be different):
