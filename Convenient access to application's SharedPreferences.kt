@@ -22,7 +22,7 @@ For example, if you need to read a LocalDateTime, you simply call AppPrefs.getLo
 
 AppPrefs simplifies creation of properties which use SharedPreferences instead of a backing variable, for example:
 
-private var isPrintable: Boolean
+var isPrintable
     get() = AppPrefs.getBoolean("MainActivity.isPrintable", this)
     set(value) = AppPrefs.put("MainActivity.isPrintable", value, this)
 
