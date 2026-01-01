@@ -1,7 +1,6 @@
-// Non-String values could be stored in SharedPreferences converted to String.
-// If you read such a value, you have to cast it back to the original type.
-// The AppPrefs object hides that cast: for example, if you need an Int or a Boolean, you simply call getInt() or getBoolean().
-// That object also provides the put() function (overloaded for different types) which exempts you from casting to String when writing into SharedPreferences.
+// Object which facilitates storing non-String values in SharedPreferences.
+// AppPrefs hides some complexity such as: obtaining a SharedPreferences, errors handling and casting from/to the original type.
+// For example, if you need to read a LocalDateTime, you simply call AppPrefs.getLocalDateTime(DbColumn.UPDATED_AT, context).
 
 // Example of use:
 
@@ -22,9 +21,12 @@ implementation 'androidx.preference:preference:1.2.1'
 
 // @ In the "util" package, created in the previous step, create object AppPrefs and copy to it the next code:
 
-////////////////////////////////////////
-// https://tinyurl.com/SharedPreferences
-////////////////////////////////////////
+/****************************************************************************************************************************
+Object which facilitates storing non-String values in SharedPreferences.
+AppPrefs hides some complexity such as: obtaining a SharedPreferences, errors handling and casting from/to the original type.
+For example, if you need to read a LocalDateTime, you simply call AppPrefs.getLocalDateTime(DbColumn.UPDATED_AT, context).
+https://tinyurl.com/SharedPreferences
+****************************************************************************************************************************/
 
 package <your util package>
 
