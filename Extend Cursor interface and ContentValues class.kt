@@ -14,7 +14,7 @@ emp.lastName= cursor.getString(cursor.getColumnIndex(DbColumn.LAST_NAME))
 // rather than
 
 emp.id = cursor.getInt(DbColumn.ID)
-emp.lastName= cursor.getString(DbColumn.LAST_NAME)
+emp.lastName = cursor.getString(DbColumn.LAST_NAME)
 
 // 4. Cursor doesn't have a getter for Boolean, so we need to extract it from Int (as it is stored in SQLite):
 
