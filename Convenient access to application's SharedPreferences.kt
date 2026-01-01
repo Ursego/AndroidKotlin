@@ -22,9 +22,13 @@ For example, if you need to read a LocalDateTime, you simply call AppPrefs.getLo
 
 AppPrefs simplifies creation of properties which use SharedPreferences instead of a backing variable, for example:
 
-var isPrintable
-    get() = AppPrefs.getBoolean("MainActivity.isPrintable", this)
-    set(value) = AppPrefs.put("MainActivity.isPrintable", value, this)
+class MyExampleActivity : AppCompatActivity() {
+    private val uuid = UUID.randomUUID().toString()
+    var isPrintable
+        get() = AppPrefs.getBoolean("${uuid}isPrintable", this)
+        set(value) = AppPrefs.put("${uuid}isPrintable", value, this)
+    ...
+}
 
 https://tinyurl.com/SharedPreferences
 ****************************************************************************************************************************/
