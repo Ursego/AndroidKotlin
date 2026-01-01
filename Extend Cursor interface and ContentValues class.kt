@@ -9,7 +9,7 @@
 //      so we write extra code, which is against the Kotlin't philosophy):
 
 emp.id = cursor.getInt(cursor.getColumnIndex(DbColumn.ID))
-emp.lastName= cursor.getString(cursor.getColumnIndex(DbColumn.LAST_NAME))
+emp.lastName = cursor.getString(cursor.getColumnIndex(DbColumn.LAST_NAME))
 
 // rather than
 
