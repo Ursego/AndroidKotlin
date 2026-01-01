@@ -14,6 +14,8 @@ In addition to your message, both the functions include the caller extracted by 
 i.e. the function where you call the Dbg.log() or Dbg.msg() - like `MainActivity.onCreate`, etc.
 That can be useful if you debug a process which consist of a few functions.
 In fact, it's the only reason to prefer Dbg.log() over Log.d().
+
+https://github.com/Ursego/AndroidKotlin/blob/main/Dbg.kt
 ****************************************************************************************************************************/
 
 package ca.intfast.iftimer.util
