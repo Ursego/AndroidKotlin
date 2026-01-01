@@ -24,9 +24,9 @@ implementation 'androidx.preference:preference:1.2.1'
 
 // @ In the "util" package, created in the previous step, create object AppPrefs and copy to it the next code:
 
-//////////////////////////////////////
+////////////////////////////////////////
 // https://tinyurl.com/SharedPreferences
-//////////////////////////////////////
+////////////////////////////////////////
 
 package <your util package>
 
