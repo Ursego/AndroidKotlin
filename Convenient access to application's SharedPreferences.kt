@@ -19,6 +19,13 @@ implementation 'androidx.preference:preference:1.2.1'
 Object which facilitates storing non-String values in SharedPreferences.
 AppPrefs hides some complexity such as: obtaining a SharedPreferences, errors handling and casting from/to the original type.
 For example, if you need to read a LocalDateTime, you simply call AppPrefs.getLocalDateTime(DbColumn.UPDATED_AT, context).
+
+AppPrefs simplifies creation of properties which use SharedPreferences instead of a backing variable, for example:
+
+private var isPrintable: Boolean
+    get() = AppPrefs.getBoolean("MainActivity.isPrintable", this)
+    set(value) = AppPrefs.put("MainActivity.isPrintable", value, this)
+
 https://tinyurl.com/SharedPreferences
 ****************************************************************************************************************************/
 
