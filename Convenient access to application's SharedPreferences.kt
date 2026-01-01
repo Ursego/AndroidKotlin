@@ -22,7 +22,13 @@ implementation 'androidx.preference:preference:1.2.1'
 
 // @ Create object Chronos as described here: https://tinyurl.com/ChronosObj
 
-// @ In the "util" package, created in the previous step, create object AppPrefs and copy to it the source code, provided below (just after the package statement):
+// @ In the "util" package, created in the previous step, create object AppPrefs and copy to it the next code:
+
+//////////////////////////////////////
+// https://tinyurl.com/SharedPreferences
+//////////////////////////////////////
+
+package <your util package>
 
 import android.content.Context
 import androidx.preference.PreferenceManager
