@@ -1,18 +1,17 @@
 /****************************************************************************************************************************
-Dbg is a lightweight debug helper.
+Dbg is a lightweight debug helper utility for logging and displaying debug messages.
 
-Public API:
+It provides two main functions to assist with debugging:
 
 * Dbg.log(msg: String)
-    Writes your message to Logcat using Log.d().
+    Wraps Log.d to print messages to Logcat, automatically appending the caller's class and method name.
 
 * Dbg.msg(msg: String, context: Context)
-    Shows a modal dialog with your message.
-    Works only in the emulator, so you can safely forget to remove calls from code without affecting real users.
+    Displays a modal alert dialog with the message, useful for quick visual debugging without checking Logcat.
+    Includes logic to prevent execution in prod eliminating risk if debug calls are accidentally left in the code.
 
-In addition to your message, both the functions include the caller extracted by scanning the stack trace,
-i.e. the function where you call the Dbg.log() or Dbg.msg() - like `MainActivity.onCreate`, etc.
-That can be useful if you debug a process which consist of a few functions.
+Both the functions display the caller, i.e. the function which has invoked the Dbg.log() or Dbg.msg().
+That can be useful if you debug a scenario consisting of a few functions.
 In fact, it's the only reason to prefer Dbg.log() over Log.d().
 
 https://github.com/Ursego/AndroidKotlin/blob/main/Dbg.kt
@@ -27,6 +26,10 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 
 object Dbg {
+    // Temporarily make DBG_MODE true to enable debug functionality which should not work in prod (like Dbg.msg()).
+    // Before publishing, don't forget make DBG_MODE false again:
+    private const val DBG_MODE = true
+
     fun log(msg: String) {
         var caller = getCaller()
         caller = if (caller.isNotEmpty()) " $caller " else ""
@@ -34,7 +37,7 @@ object Dbg {
     }
 
     fun msg(msg: String, context: Context) {
-        if (!isRunningOnEmulator()) return // extra asscovering if you forget to remove a Dbg.msg() call
+        if (!isDbgMode()) return // disable the message in prod if the developer has forgotten to remove a Dbg.msg() call
 
         val caller = getCaller()
         val displayMsg = if (caller.isNotEmpty()) "$caller\n\n$msg" else msg
@@ -93,7 +96,13 @@ object Dbg {
         return ""
     }
 
-    private fun isRunningOnEmulator(): Boolean {
+    fun isDbgMode(): Boolean {
+        if (!this.DBG_MODE) return false
+        // Extra asscovering if the developer has forgotten to make DBG_MODE false before publishing:
+        return isRunningOnEmulator()
+    }
+
+    fun isRunningOnEmulator(): Boolean {
         return (
                 Build.FINGERPRINT.startsWith("generic") ||
                         arrayOf("vbox", "test-keys").any { Build.FINGERPRINT.lowercase().contains(it) } ||
@@ -104,5 +113,4 @@ object Dbg {
                         arrayOf("goldfish", "ranchu").any { Build.HARDWARE.contains(it) }
                 )
     }
-
 }
