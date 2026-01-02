@@ -197,10 +197,10 @@ interface Crudable {
 
 // // Functions which SELECT one scalar value of the given data type:
 
-// * queryForString() // example: SELECT last_name FROM emp WHERE emp_id = 123
-// * queryForLong() // example: SELECT COUNT(*) FROM emp
-// * queryForDouble() // example: SELECT salary FROM emp WHERE emp_id = 123
-// * queryForBoolean() // example: SELECT is_active FROM emp WHERE emp_id = 123
+// * retrieveString() // example: SELECT last_name FROM emp WHERE emp_id = 123
+// * retrieveLong() // example: SELECT COUNT(*) FROM emp
+// * retrieveDouble() // example: SELECT salary FROM emp WHERE emp_id = 123
+// * retrieveBoolean() // example: SELECT is_active FROM emp WHERE emp_id = 123
 // * exists() // mimics the EXISTS statement of SQL
 
 // // DML functions:
@@ -393,9 +393,9 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
             val statement = this.readableDatabase.compileStatement(sqlSelect)
             result = statement.simpleQueryForString()
         } catch (e: SQLException /* compileStatement() failed */) {
-            throw Exception("CrudHelper.queryForString(): '$sqlSelect' is not a valid SQL statement.")
+            throw Exception("'$sqlSelect' is not a valid SQL statement.")
         } catch (e: SQLiteDoneException /* simpleQueryForString() returned zero rows */) {
-            if (required) throw Exception("CrudHelper.queryForString(): no data found by '$sqlSelect'.")
+            if (required) throw Exception("No data found by this query: '$sqlSelect'.")
             return null
         }
 
