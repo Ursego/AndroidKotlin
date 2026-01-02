@@ -98,7 +98,8 @@ object Dbg {
 
     fun isDbgMode(): Boolean {
         if (!this.DBG_MODE) return false
-        // Extra asscovering if the developer has forgotten to make DBG_MODE false before publishing:
+        // A safeguard to prevent debug features from accidentally appearing in production builds
+        // running on real user devices, even if the developer forgot to revert DBG_MODE to false:
         return isRunningOnEmulator()
     }
 
