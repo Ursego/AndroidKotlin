@@ -267,7 +267,7 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
     // For example, to run an SQL statement, which returns nothing (or you don't need the returned value), write:
     // crudHelper.writableDatabase.execSQL("...")
     // ----------------------------------------------------------------------------------------------------------------------
-    
+
     // ----------------------------------------------------------------------------------------------------------------------
     // retrieveList() [SELECTs a recordset]:
     // ----------------------------------------------------------------------------------------------------------------------
@@ -382,11 +382,11 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
     // ----------------------------------------------------------------------------------------------------------------------
 
     /***********************************************************************************************************************/
+    // Executes a statement that returns a scalar String value. For example, SELECT last_name FROM emp WHERE emp_id = 123
     fun retrieveString(
         sqlSelect: String,
         required: Boolean = false
     ): String? {
-        // Executes a statement that returns a scalar String value. For example, SELECT last_name FROM emp WHERE emp_id = 123
         val result: String
 
         try {
@@ -402,11 +402,11 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
         return result
     }
     /***********************************************************************************************************************/
+    // Executes a statement that returns a scalar String value. For example, SELECT last_name FROM emp WHERE emp_id = 123
     fun retrieveLong(
         sqlSelect: String,
         required: Boolean = false
     ): Long? {
-        // Executes a statement that returns a scalar Long value. For example, SELECT COUNT(*) FROM emp
         val result: Long
 
         try {
@@ -422,12 +422,12 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
         return result
     }
     /***********************************************************************************************************************/
+    // Executes a statement that returns a scalar String value convertible to Double.
+    // For example, SELECT salary FROM emp WHERE emp_id = 123
     fun retrieveDouble(
         sqlSelect: String,
         required: Boolean = false
     ): Double? {
-        // Executes a statement that returns a scalar String value convertible to Double.
-        // For example, SELECT salary FROM emp WHERE emp_id = 123
         val resultAsDouble: Double
         val resultAsString = this.retrieveString(sqlSelect, required)
         if (resultAsString == null && !required) return null
@@ -443,12 +443,12 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
         return resultAsDouble
     }
     /***********************************************************************************************************************/
+    // Executes a statement that returns a scalar Long value which can be treated as Boolean (i.e. 0 or 1).
+    // For example, SELECT is_active FROM emp WHERE emp_id = 123
     fun retrieveBoolean(
         sqlSelect: String,
         required: Boolean = false
     ): Boolean? {
-        // Executes a statement that returns a scalar Long value which can be treated as Boolean (i.e. 0 or 1).
-        // For example, SELECT is_active FROM emp WHERE emp_id = 123
         val result = this.retrieveLong(sqlSelect, required)
         if (result == null && !required) return null
         // if (result == null && required), then an Exception has already been thrown by retrieveLong()
@@ -462,11 +462,11 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
                 "To be treated as Boolean, it must be 0 or 1.")
     }
     /***********************************************************************************************************************/
+    // Mimics the EXISTS statement of SQL.
     fun exists(
         tableName: String,
         whereClause: String? = null
     ): Boolean {
-        // Mimics the EXISTS statement of SQL.
         val sqlSelect = "SELECT Count(1) FROM $tableName" + if (whereClause != null) " WHERE $whereClause" else ""
         val count = this.retrieveLong(sqlSelect, required = false)!!
         return (count > 0)
@@ -493,9 +493,8 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
     /***********************************************************************************************************************/
     open fun update(
         entity: Crudable,
-        whereClause: String? = null
+        whereClause: String? = null // if whereClause is not supplied, this fun updates by entity.id.
     ): Int {
-        // If whereClause is not supplied, this fun updates by entity.id.
         val cv = entity.extractContentValues()
         val finalWhereClause = whereClause ?: "${entity.ID_COL_NAME}=${entity.id}"
         return this.writableDatabase.update(entity.TABLE_NAME, cv, finalWhereClause, null)
@@ -518,11 +517,12 @@ open class CrudHelper(context: Context): CustomSQLiteOpenHelper(context) {
         return insert(entity)
     }
     /***********************************************************************************************************************/
+    // Deletes the entity by its id.
+    // If the deleting condition is different (or there is no condition at all, which deletes all rows), then call directly:
+    // <your CrudHelper>.writableDatabase.delete(<table>, <whereClause>, <whereArgs>)
     open fun delete(
         entity: Crudable
     ): Int {
-        // Deletes the entity by its id. If deleting condition is different (or there is no condition at all), then call directly:
-        // <your CrudHelper>.writableDatabase.delete(<table>, <whereClause>, <whereArgs>)
         return this.writableDatabase.delete(
             entity.TABLE_NAME,
             "${entity.ID_COL_NAME}=${entity.id}",
