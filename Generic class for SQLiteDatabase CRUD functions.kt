@@ -2,45 +2,46 @@
 
 // 1. Persists Kotlin objects to the database by passing objects directly to DML statements.
 
-// 2. Returns database results as Kotlin types: scalars, objects (single records), or ArrayLists (recordsets) - ready for immediate
-//    use in business logic. No more ContentValues and Cursor manipulation cluttering your business code!
+// 2. Returns DB results as Kotlin types - objects for single records, ArrayLists for recordsets and scalars for single values -
+//    ready for immediate use in business logic. No more ContentValues and Cursor manipulation cluttering your business code!
 
 // Most examples place all CRUD functions for different entities in a single class inheriting from SQLiteOpenHelper.
 // Worse, they mix business logic with technical code like ContentValues population and Cursor reading.
 // Even examples that suggest separate classes for each entity promote endless copy-paste.
-// I don't understand why experienced developers writing these tutorials haven't encapsulated common logic in a generic class - 
-// first-year Computer Science students know code duplication is bad.
+// I don't understand why experienced authors of these tutorials haven't encapsulated common logic in a single generic class - 
+//     even first-year Computer Science students know that code duplication is bad.
 
-// I reject this approach entirely. For each entity (Emp, Dept, etc.), I create a dedicated controller class (EmpController, DeptController)
-// handling only that entity's database operations - rather than dumping everything into one monolithic CustomSQLiteOpenHelper. 
+// I reject the existing approach entirely.
+// For each entity, I create a dedicated controller class (EmpController, DeptController) handling only that entity's DB operations -
+//     rather than dumping everything into one monolithic CustomSQLiteOpenHelper. 
 // And I separate technical code from business logic.
 
-// CRUD functions across entities are typically similar - differing only in ContentValues population, Cursor extraction, and SQL specifics.
+// CRUD functions across entities are usually similar - differing only in ContentValues population, Cursor extraction, and SQL specifics.
 // Remove ContentValues/Cursor manipulation, and these functions become nearly identical:
-// INSERT one record and return the auto-incremented ID; UPDATE/SELECT one record by ID; SELECT ArrayList by WHERE clause.
+// they INSERT one record and return the auto-incremented ID, UPDATE/SELECT/DELETE one record by ID, and SELECT ArrayList by WHERE clause.
 
-// This solution refactors common code into an ancestor class, eliminating the need to create many near-identical controller classes.
+// The suggested solution refactors common code into an ancestor class, eliminating the need to create many near-identical controller classes.
 // XxxController classes become very small - containing only entity-specific logic requiring additional processing beyond standard CRUD calls.
 // If your entity needs only standard CRUD functions, skip creating a controller entirely and call 
-// functions directly by instantiating the CRUD helper class (it's not abstract).
+//     functions directly by instantiating the CRUD helper class (it's not abstract).
 
 // STEPS:
 
 // @ Perform the steps, described here: https://tinyurl.com/CursorInterface.
 
 // @ Create the "db" package, where you will put the stuff, related to database manipulations, specific to this application.
-// Pay attention that any stuff, which doesn't deal with the entities of this app (and, hence, can be reused in other apps),
-// should be placed in the "util" package - even if it DB-related.
+// Pay attention that any stuff, which doesn't deal with the entities of the current app (and, hence, can be reused in other apps),
+// should be placed in the "util" package - even if they are DB-related.
 
 // @ In the "db" package, create a Kotlin file named DbInfo and copy the following code into it - just after the "package" directive
 // (change the DB name to the actual one):
 
 object DbInfo {
     const val NAME = "<YOUR DB NAME>.db"
-    const val VERSION = 1 // increment if you change the database schema
+    const val VERSION = 1 // increment if you change the DB schema in future versions, that will flag to update the schema in existing users
 }
 
-// @ In "db" package, create a Kotlin file named DbTable. That object will contain the names of the DB tables, for example:
+// @ In the "db" package, create a Kotlin file named DbTable. That object will contain the names of the DB tables, for example:
 
 object DbTable {
     const val EMP = "emp"
