@@ -16,11 +16,13 @@ implementation 'androidx.preference:preference:1.2.1'
 // @ In the "util" package, created in the previous step, create object AppPrefs and copy to it the next code:
 
 /****************************************************************************************************************************
-Object which facilitates storing non-String values in SharedPreferences.
-AppPrefs hides some complexity such as: obtaining a SharedPreferences, errors handling and casting from/to the original type.
-For example, if you need to read a LocalDateTime, you simply call AppPrefs.getLocalDateTime(DbColumn.UPDATED_AT, context).
+AppPrefs which facilitates storing values in SharedPreferences.
+It abstracts away the complexity of obtaining SharedPreferences, handling potential type casting errors,
+    and converting complex types (like `LocalDate`, `LocalDateTime`, etc.) to and from Strings for storage.
+For example, to read a LocalDateTime, simply call:
+val updatedAt = AppPrefs.getLocalDateTime(DbColumn.UPDATED_AT, context)
 
-AppPrefs simplifies creation of properties which use SharedPreferences instead of a backing variable, for example:
+AppPrefs simplifies creation of properties which use SharedPreferences instead of an instance backing variable, for example:
 
 class MyExampleActivity : AppCompatActivity() {
     private val uuid = UUID.randomUUID().toString()
