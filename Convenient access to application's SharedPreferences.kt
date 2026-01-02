@@ -22,7 +22,7 @@ It abstracts away the complexity of obtaining SharedPreferences, handling potent
 For example, to read a LocalDateTime, simply call:
 val updatedAt = AppPrefs.getLocalDateTime(DbColumn.UPDATED_AT, context)
 
-AppPrefs simplifies creation of properties which use SharedPreferences instead of an instance backing variable, for example:
+AppPrefs simplifies creation of properties which use SharedPreferences instead of a backing instance variable, for example:
 
 class MyExampleActivity : AppCompatActivity() {
     private val uuid = UUID.randomUUID().toString()
