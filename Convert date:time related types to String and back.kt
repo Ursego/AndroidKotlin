@@ -4,7 +4,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 
 /****************************************************************************************************************************
 Object which facilitates conversion of LocalDate, LocalTime & LocalDateTime to String and back.
@@ -16,58 +15,55 @@ https://tinyurl.com/ChronosObj
 ****************************************************************************************************************************/
 
 object Chronos {
-    val dFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE // or: DateTimeFormatter.ofPattern("<your pattern>")
-    val tFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME // or: DateTimeFormatter.ofPattern("<your pattern>")
-    val dtFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME // or: DateTimeFormatter.ofPattern("<your pattern>")
+    val defaultDateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
+    val defaultTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_TIME
+    val defaultDateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
-    // LocalDate:
-
-    fun toLocalDate(sVal: String?): LocalDate? {
-        if (sVal == null) return null
-        try {
-            return LocalDate.parse(sVal, dFormatter)
-        } catch (e: DateTimeParseException) {
-            throw Exception("Cannot parse '$sVal' to LocalDate.")
-        }
-    }
+    // Convert TO String:
 
     fun toString(dVal: LocalDate?, pattern: String? = null): String? {
         if (dVal == null) return null
-        val f = if (pattern.isNullOrBlank()) dFormatter else DateTimeFormatter.ofPattern(pattern)
-        return f.format(dVal)
-    }
-
-    // LocalTime:
-
-    fun toLocalTime(sVal: String?): LocalTime? {
-        if (sVal == null) return null
-        try {
-            return LocalTime.parse(sVal, tFormatter)
-        } catch (e: DateTimeParseException) {
-            throw Exception("Cannot parse '$sVal' to LocalTime.")
-        }
+        return getDateFormatter(pattern).format(dVal)
     }
 
     fun toString(tVal: LocalTime?, pattern: String? = null): String? {
         if (tVal == null) return null
-        val f = if (pattern.isNullOrBlank()) tFormatter else DateTimeFormatter.ofPattern(pattern)
-        return f.format(tVal)
-    }
-
-    // LocalDateTime:
-
-    fun toLocalDateTime(sVal: String?): LocalDateTime? {
-        if (sVal == null) return null
-        try {
-            return LocalDateTime.parse(sVal, dtFormatter)
-        } catch (e: DateTimeParseException) {
-            throw Exception("Cannot parse '$sVal' to LocalDateTime.")
-        }
+        return getTimeFormatter(pattern).format(tVal)
     }
 
     fun toString(dtVal: LocalDateTime?, pattern: String? = null): String? {
         if (dtVal == null) return null
-        val f = if (pattern.isNullOrBlank()) dtFormatter else DateTimeFormatter.ofPattern(pattern)
-        return f.format(dtVal)
+        return getDateTimeFormatter(pattern).format(dtVal)
     }
+
+    // Convert FROM String:
+
+    fun toLocalDate(sVal: String?, pattern: String? = null): LocalDate? {
+        if (sVal.isNullOrBlank()) return null
+        return LocalDate.parse(sVal, getDateFormatter(pattern))
+    }
+
+    fun toLocalTime(sVal: String?, pattern: String? = null): LocalTime? {
+        if (sVal.isNullOrBlank()) return null
+        return LocalTime.parse(sVal, getTimeFormatter(pattern))
+    }
+
+    fun toLocalDateTime(sVal: String?, pattern: String? = null): LocalDateTime? {
+        if (sVal.isNullOrBlank()) return null
+        return LocalDateTime.parse(sVal, getDateTimeFormatter(pattern))
+    }
+
+    // Service functions:
+
+    private fun getFormatter(pattern: String?, defaultFormatter: DateTimeFormatter): DateTimeFormatter =
+        if (pattern.isNullOrBlank()) defaultFormatter else DateTimeFormatter.ofPattern(pattern)
+
+    private fun getDateFormatter(pattern: String? = null): DateTimeFormatter =
+        getFormatter(pattern, defaultDateFormatter)
+
+    private fun getTimeFormatter(pattern: String? = null): DateTimeFormatter =
+        getFormatter(pattern, defaultTimeFormatter)
+
+    private fun getDateTimeFormatter(pattern: String? = null): DateTimeFormatter =
+        getFormatter(pattern, defaultDateTimeFormatter)
 }
