@@ -51,18 +51,18 @@ object DbTable {
 // @ In "db" package, create a Kotlin file named DbColumn. That object will contain the names of the DB tables' columns, for example:
 
 object DbColumn {
-    const val ID = "_id"
+    const val ID = "_id" // "_id" is the default ID col name; it's used automatically by some functions of CrudHelper if you don't pass another col name
     const val FIRST_NAME = "first_name"
     const val LAST_NAME = "last_name"
     const val DOB = "dob"
     const val IS_ACTIVE = "is_active"
 }
 
-// We create one object which will contain all the columns of all the tables (rather than a dedicated object for each table) because
-// a same column can exist in many tables, and we want to ensure consistency all over the application (after all, that's why we use constants!).
-// That also obeys the DRY principle (Don't Repeat Yourself) - we don't duplicate a same column name constant in many places.
-// Obviously, we will use these constants to build the CREATE TABLE statements.
-// So, if the column name is "dob", it will be "dob" everywhere - not "dob", "birth_date" and "date_of_birth" in different tables.
+// We create one object which will contain all the columns of all the tables (rather than a dedicated object for each table) because:
+//     * a same column can exist in many tables, and we want to ensure consistency;
+//     * we don't want to duplicate a same constant in many objects.
+// We will use these constants to build the CREATE TABLE statements, and that will eliminate different versions of a sam entity.
+// For example, if the column name is "dob", it will be "dob" everywhere - not "dob", "birth_date" and "date_of_birth" in different tables.
 
 // @ In "db" package, create a Kotlin file named CustomSQLiteOpenHelper and copy the following code into it - just after the "package" directive:
 
