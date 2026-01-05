@@ -61,7 +61,7 @@ object DbColumn {
 // We create one object which will contain all the columns of all the tables (rather than a dedicated object for each table) because:
 //     * a same column can exist in many tables, and we want to ensure consistency;
 //     * we don't want to duplicate a same constant in many objects.
-// We will use these constants to build the CREATE TABLE statements, and that will eliminate different versions of a sam entity.
+// We will use these constants to build the CREATE TABLE statements, and that will eliminate different versions of a same entity.
 // For example, if the column name is "dob", it will be "dob" everywhere - not "dob", "birth_date" and "date_of_birth" in different tables.
 
 // @ In "db" package, create a Kotlin file named CustomSQLiteOpenHelper and copy the following code into it - just after the "package" directive:
